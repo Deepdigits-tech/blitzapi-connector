@@ -124,16 +124,16 @@ with tabs[0]:
     col1, col2 = st.columns(2)
     with col1:
         fc_keywords = st.text_input("Keywords (comma-separated)", placeholder="e.g. SaaS, AI, education", key="fc_kw")
-        fc_industry = st.text_input("Industry (comma-separated)", placeholder="e.g. Technology, Education", key="fc_ind")
+        fc_industry = st.text_input("Industry (comma-separated)", placeholder="e.g. Software Development, Education", key="fc_ind")
         fc_limit = st.slider("Max results", 5, 50, 25, key="fc_limit")
     with col2:
         fc_country = st.text_input("Country codes (comma-separated)", placeholder="e.g. US, CA, GB", key="fc_country")
         fc_city = st.text_input("City (comma-separated)", placeholder="e.g. San Francisco, New York", key="fc_city")
-        fc_emp_col1, fc_emp_col2 = st.columns(2)
-        with fc_emp_col1:
-            fc_emp_min = st.number_input("Min employees", min_value=0, value=0, key="fc_emp_min")
-        with fc_emp_col2:
-            fc_emp_max = st.number_input("Max employees", min_value=0, value=0, help="0 = no limit", key="fc_emp_max")
+        fc_emp_range = st.multiselect(
+            "Employee range",
+            ["1-10", "11-50", "51-200", "201-500", "501-1000", "1001-5000", "5001-10000", "10001+"],
+            key="fc_emp_range",
+        )
 
     if st.button("🔍 Search Companies", type="primary", key="fc_btn"):
         with st.spinner("Searching..."):
@@ -143,8 +143,7 @@ with tabs[0]:
                     industry_include=parse_comma_list(fc_industry) or None,
                     country_codes=parse_comma_list(fc_country) or None,
                     city_include=parse_comma_list(fc_city) or None,
-                    employee_min=fc_emp_min if fc_emp_min > 0 else None,
-                    employee_max=fc_emp_max if fc_emp_max > 0 else None,
+                    employee_range=fc_emp_range or None,
                     max_results=fc_limit,
                 )
                 show_results(data, "companies")

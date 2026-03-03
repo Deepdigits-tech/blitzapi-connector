@@ -52,9 +52,9 @@ class BlitzClient:
         industry_include: list[str] | None = None,
         industry_exclude: list[str] | None = None,
         country_codes: list[str] | None = None,
+        continent: list[str] | None = None,
         city_include: list[str] | None = None,
-        employee_min: int | None = None,
-        employee_max: int | None = None,
+        employee_range: list[str] | None = None,
         max_results: int = 25,
     ) -> dict:
         """POST /v2/search/companies — search by keywords, industry, location, size."""
@@ -73,20 +73,17 @@ class BlitzClient:
             if industry_exclude:
                 ind["exclude"] = industry_exclude
             company["industry"] = ind
-        if country_codes or city_include:
+        if country_codes or continent or city_include:
             hq: dict = {}
             if country_codes:
                 hq["country_code"] = country_codes
+            if continent:
+                hq["continent"] = continent
             if city_include:
                 hq["city"] = {"include": city_include}
             company["hq"] = hq
-        if employee_min is not None or employee_max is not None:
-            ec: dict = {}
-            if employee_min is not None:
-                ec["min"] = employee_min
-            if employee_max is not None:
-                ec["max"] = employee_max
-            company["employee_count"] = ec
+        if employee_range:
+            company["employee_range"] = employee_range
         payload: dict = {"max_results": max_results}
         if company:
             payload["company"] = company
