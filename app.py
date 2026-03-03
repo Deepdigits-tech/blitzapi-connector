@@ -161,19 +161,20 @@ with tabs[1]:
     with col1:
         fe_level = st.multiselect(
             "Job level",
-            ["Owner", "Partner", "CXO", "VP", "Director", "Manager", "Senior", "Entry", "Training", "Unpaid"],
+            ["C-Team", "VP", "Director", "Manager", "Staff", "Other"],
             key="fe_level",
         )
     with col2:
         fe_function = st.multiselect(
             "Job function",
-            ["Accounting", "Administrative", "Arts and Design", "Business Development",
-             "Community and Social Services", "Consulting", "Education", "Engineering",
-             "Entrepreneurship", "Finance", "Healthcare Services", "Human Resources",
-             "Information Technology", "Legal", "Marketing", "Media and Communication",
-             "Military and Protective Services", "Operations", "Product Management",
-             "Program and Project Management", "Purchasing", "Quality Assurance",
-             "Real Estate", "Research", "Sales", "Support"],
+            ["Advertising & Marketing", "Art, Culture and Creative Professionals",
+             "Construction", "Customer/Client Service", "Education", "Engineering",
+             "Finance & Accounting", "General Business & Management",
+             "Healthcare & Human Services", "Human Resources", "Information Technology",
+             "Legal", "Manufacturing & Production", "Operations", "Other",
+             "Public Administration & Safety", "Purchasing", "Research & Development",
+             "Sales & Business Development", "Science", "Supply Chain & Logistics",
+             "Writing/Editing"],
             key="fe_function",
         )
     fe_limit = st.slider("Max results", 5, 50, 25, key="fe_limit")
@@ -212,8 +213,8 @@ with tabs[2]:
             exclude = st.text_input(f"Exclude titles (comma-separated)", placeholder="e.g. Intern, Assistant", key=f"wf_exc_{i}")
             level_data = {
                 "include_title": parse_comma_list(titles),
-                "location": [],
-                "include_headline_search": True,
+                "location": ["WORLD"],
+                "include_headline_search": False,
             }
             if exclude:
                 level_data["exclude_title"] = parse_comma_list(exclude)
