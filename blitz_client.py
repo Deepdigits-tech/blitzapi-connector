@@ -45,6 +45,14 @@ class BlitzClient:
 
     # ── Company Search & Enrichment ──────────────────────────
 
+    @staticmethod
+    def _clean_list(items: list[str] | None) -> list[str] | None:
+        """Remove empty strings and whitespace-only entries from a list."""
+        if not items:
+            return None
+        cleaned = [x.strip() for x in items if x.strip()]
+        return cleaned or None
+
     def find_companies(
         self,
         keywords_include: list[str] | None = None,
@@ -58,6 +66,15 @@ class BlitzClient:
         max_results: int = 25,
     ) -> dict:
         """POST /v2/search/companies — search by keywords, industry, location, size."""
+        keywords_include = self._clean_list(keywords_include)
+        keywords_exclude = self._clean_list(keywords_exclude)
+        industry_include = self._clean_list(industry_include)
+        industry_exclude = self._clean_list(industry_exclude)
+        country_codes = self._clean_list(country_codes)
+        continent = self._clean_list(continent)
+        city_include = self._clean_list(city_include)
+        employee_range = self._clean_list(employee_range)
+
         company: dict = {}
         if keywords_include or keywords_exclude:
             kw: dict = {}
@@ -84,7 +101,7 @@ class BlitzClient:
             company["hq"] = hq
         if employee_range:
             company["employee_range"] = employee_range
-        payload: dict = {"max_results": max_results}
+        payload: dict = {"max_results": int(max_results)}
         if company:
             payload["company"] = company
         return self._post("/search/companies", payload)
